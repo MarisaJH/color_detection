@@ -1,0 +1,10 @@
+<launch>
+ <arg name="map_file" 						default="$(find color_detection)/maps/cs_lounge.yaml"/>
+
+ <rosparam file="$(find color_detection)/zones/zone.yaml" command="load" ns="move_base/global_costmap/costmap_prohibition_layer"/>
+
+ <include file="$(find turtlebot_navigation)/launch/amcl_demo.launch">
+		<arg name="map_file" 					default="$(arg map_file)"/>
+ </include>
+
+</launch>

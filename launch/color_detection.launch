@@ -1,0 +1,14 @@
+<launch>
+    <arg name="feedback_type" 						default="physical"/>
+    <node pkg="color_detection" type="color_detect.py" name="color_detect" 
+    output="screen"/>
+    
+    <node pkg="color_detection" type="driver.py" name="driver" 
+    args = "$(arg feedback_type)"
+    output="screen"/>
+
+    <node pkg="color_detection" type="pointcloudSub" name="pointcloudSub" 
+    output="screen"/>
+
+
+</launch>

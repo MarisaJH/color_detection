@@ -1,0 +1,3 @@
+color_detection/points[] pixels
+---
+geometry_msgs/Point[] conePos

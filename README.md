@@ -22,7 +22,8 @@ This package contains code for using the *physical* interface with either *physi
 * Ros Kinetic
 
 ### Setup
-* Optional: Create a SLAM map of the room. If you don't have one, a default map will be used.
+* Create a SLAM map of the room. 
+    * If you don't have one, a default map will be used. In color_detection/maps, edit cs_lounge.yaml and change the image directory to what it is on your computer.
 * To make the Costmap Prohibition Layer work, add the following line on the turtlebot to opt/ros/kinetic/share/turtlebot_navigation/param/global_costmap_params.yaml under Plugins and before the inflation layer:
 ```
 - {name: costmap_prohibition_layer,       type: "costmap_prohibition_layer_namespace::CostmapProhibitionLayer"}

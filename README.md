@@ -22,6 +22,7 @@ If you want to use the *AR* interface, see [this project](https://github.com/Mar
 * [Costmap Prohibition Layer](http://wiki.ros.org/costmap_prohibition_layer)
 * [Tf2](http://wiki.ros.org/tf2)
 * Ros Kinetic
+* [ARPrivacyZones](https://github.com/MarisaJH/ARPrivacyZones) for AR feedback
 
 ### Setup
 * Create a SLAM map of the room. 
@@ -43,13 +44,23 @@ If you want to use the *AR* interface, see [this project](https://github.com/Mar
     8. After the program says “Writing zones to file” press Ctrl + C to quit the program  
     9. Close out of rviz and amcl by typing Ctrl + C   
     10. Now type **python amcl_rviz.py physical /path/to/your/map.yaml**  
-        - NOTE: If you don't provide a map file, a default one will be used.    
+        * NOTE: If you don't provide a map file, a default one will be used.    
     11. Now you can see on the map the zone that you specified as private  
     12. If the robot is told to drive anywhere in the room, it won’t be able to go in that zone  
-7. Else, if you want to see *virtual feedback* (ie, see virtual walls that mark the private zone on a phone), do the following:  
-    8. Open a terminal and type **roslaunch color_detection color_detection.launch feedback_type:=virtual**    
-        - NOTE: the feedback type can be set to anything other than “physical” in order for this to work.    
-    9. Exit the program once it has printed the positions.   
-    10. Close out of rviz and amcl by typing Ctrl + C   
-    11. On the phone, stand in the same place the robot is standing (you can hold the phone over the robot) and open the black app.   
-    12. In the menu, click the “Other to Virtual Feedback” button  
+    
+7. If you want to see *map feedback*, do the following:  
+    8. Open another terminal and type **roslaunch color_detection color_detection.launch feedback_type:=map**  
+    9. After the program says “Writing zones to file” press Ctrl + C to quit the program  
+    10. On the local laptop, open a terminal and type **python toMap.py [-h] [-m MAP] [-t TBOT_PATH] [-r REMOTE_HOST] physical**  
+        * Arguments in brackets are optional but will be needed if the program is not being run with default settings (don’t type the brackets)  
+        * *MAP* is the path to your map file. If you don’t want to use cs_lounge.yaml, specify your own map.  
+        * *TBOT_PATH* is the path to the color_detection package on the turtlebot. Default is /home/turtlebot/catkin_ws/src/color_detection. If yours is different, provide it.  
+        * *REMOTE_HOST* is in the form username@host. This allows files to be copied from the turtlebot to the local laptop.  
+    11. Click the “import map data” button and choose physicalToMap.yaml in the color_detection/zones directory  
+    
+8. If you want to see *AR feedback* (ie, see virtual walls that mark the private zone on a phone), do the following:  
+    9. Open a terminal and type **roslaunch color_detection color_detection.launch feedback_type:=virtual**     
+    10. Exit the program once it has printed the positions.   
+    11. Close out of rviz and amcl by typing Ctrl + C   
+    12. On the phone, stand in the same place the robot is standing (you can hold the phone over the robot) and open the black app.   
+    13. In the menu, click the “Other to Virtual Feedback” button  

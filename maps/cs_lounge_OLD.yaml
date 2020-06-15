@@ -1,4 +1,4 @@
-image: /home/turtlebot/catkin_ws/src/color_detection/maps/cs_lounge.pgm
+image: /home/turtlebot/catkin_ws/src/color_detection/maps/cs_lounge_OLD.pgm
 resolution: 0.050000
 origin: [-12.200000, -13.800000, 0.000000]
 negate: 0

@@ -33,11 +33,11 @@ from color_detection.msg import coor, points
 from color_detection.srv import pixelTo3dPoint
 
 class driver:
-    def __init__(self, feedback):
+    def __init__(self, feedback_type):
         # define what type of feedback will be provided: physical
-        # (needs to write to a file) or virtual (needs to upload
-        # data to server)
-        self.physical_feedback = feedback
+        # or map (needs to write to a file), or virtual (needs to
+        # upload data to server)
+        self.feedback_type = feedback_type
 
         self.transform = -1
         self.tf_buffer = tf.Buffer()
@@ -57,6 +57,7 @@ class driver:
 
         # if orange cones were detected, send their
         # pixel coordinates to the pointcloud node
+        print coor.colorDetected
         if coor.colorDetected and self.transform != -1:
 
             try:
@@ -67,23 +68,29 @@ class driver:
                 # this would mean the pc2_srv hasn't received pointcloud data yet,
                 # or not enough cones were detected
                 if conePos[0].x == -99 or len(conePos) < 4:
+                    print(len(conePos))
                     return
 
-                if (not self.physical_feedback):
+                # map or virtual feedback
+                if (self.feedback_type != "physical"):
                     # organize segments so there are only 4 (to make a rectangle)
                     if (len(conePos) > 4):
+                        print("reducing segments")
                         conePos = self.reduce_segments(conePos)
 
                     # upload cone positions to server
-                    self.upload_positions(conePos)
+                    if (self.feedback_type == "virtual"):
+                        print("uploading positions")
+                        self.upload_positions(conePos)
 
                 # calculate convex hull
+                print("calculting convex hull")
                 hull = self.convex_hull(self.transform_points(conePos))
 
-
-                if (self.physical_feedback):
+                # map or physical feedback
+                if (self.feedback_type != "virtual"):
                     # write cone positions (hull) to file
-                    zone_file = rospy.get_param('color_detection/zones', self.pkg_path + "/zones/zone.yaml")
+                    zone_file = rospy.get_param('color_detection/zones', self.pkg_path + "/zones/physicalZone.yaml")
                     with open(zone_file, "w") as f:
                         zone = {"prohibition_areas": [hull]}
                         yaml.safe_dump(zone, f)
@@ -114,10 +121,8 @@ class driver:
         return tf_cone_pos
 
     def log_positions(self, positions):
-        if (self.physical_feedback):
-            log_file = rospy.get_param('color_detection/zones', self.pkg_path + "/log/physicalLog.txt")
-        else:
-            log_file = rospy.get_param('color_detection/zones', self.pkg_path + "/log/virtualLog.txt")
+        log_file = rospy.get_param('color_detection/zones', self.pkg_path + "/log/physicalLog.txt")
+
         with open(log_file, "a") as f:
             time = datetime.now().strftime("\n%d/%m/%Y %H:%M:%S\n")
             f.write(time)
@@ -225,10 +230,7 @@ if __name__ == "__main__":
     rospy.init_node('driver', anonymous=True, log_level=rospy.DEBUG)
 
     args = rospy.myargv(argv=sys.argv)
-    feedback_type = True
-
-    if len(args) == 2 and args[1] != "physical":
-        feedback_type = False
+    feedback_type =args[1]
 
     driver = driver(feedback_type)
 

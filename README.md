@@ -12,7 +12,9 @@ There are three feedback types to see if the privacy zone works:
 2. **Map**: The no-go region is shaded red on a map of the room.
 3. **AR**: A virtual fence appears on the screen where the no-go region was specified. 
 
-This package contains code for using the *physical* interface with either *physical* or *AR* feedback, and either the *map* or *AR* interfaces with *physical* feedback.
+This package contains code for using the *physical* interface with either *physical*, *AR*, or *map* feedback, and either the *map* or *AR* interfaces with *physical* feedback.
+
+If you want to use the *AR* interface, see [this project](https://github.com/MarisaJH/ARPrivacyZones).
 
 ## Guide
 ### Requirements
